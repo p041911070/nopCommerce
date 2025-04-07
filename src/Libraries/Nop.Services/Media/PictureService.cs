@@ -171,14 +171,15 @@ public partial class PictureService : IPictureService
     /// A task that represents the asynchronous operation
     /// The task result contains the 
     /// </returns>
-    protected virtual Task<string> GetImagesPathUrlAsync(string storeLocation = null)
+    protected virtual async Task<string> GetImagesPathUrlAsync(string storeLocation = null)
     {
         var pathBase = _httpContextAccessor.HttpContext?.Request?.PathBase.Value ?? string.Empty;
         var imagesPathUrl = _mediaSettings.UseAbsoluteImagePath ? storeLocation : $"{pathBase}/";
         imagesPathUrl = string.IsNullOrEmpty(imagesPathUrl) ? _webHelper.GetStoreLocation() : imagesPathUrl;
+# await _logger.ErrorAsync($"GetImagesPathUrl: {_webHelper.GetStoreLocation()}");
         imagesPathUrl += "images/";
 
-        return Task.FromResult(imagesPathUrl);
+        return await Task.FromResult(imagesPathUrl);
     }
 
     /// <summary>
